@@ -29,10 +29,11 @@ class SilenceDetector:
         return False
 
 
-def record():
+def record() -> str:
     import queue
     import sounddevice
     import scipy.io.wavfile as wavfile
+    import tempfile
 
     # # Sampling frequency
     freq = 44100
@@ -61,11 +62,13 @@ def record():
 
     print("Recorded is %f frames" % (len(recording) / freq))
 
+    tmpfile = tempfile.mktemp(".wav")
+
     # This will convert the NumPy array to an audio
     # file with the given sampling frequency
-    wavfile.write("recording.wav", freq, recording)
+    wavfile.write(tmpfile, freq, recording)
 
-    return "recording.wav"
+    return tmpfile
 
 
 client = groq.Groq()
